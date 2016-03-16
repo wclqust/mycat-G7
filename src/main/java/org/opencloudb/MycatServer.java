@@ -47,6 +47,7 @@ import org.opencloudb.cache.CacheService;
 import org.opencloudb.classloader.DynaClassLoader;
 import org.opencloudb.config.model.SystemConfig;
 import org.opencloudb.config.model.crypto.CrytoAlgorithm;
+import org.opencloudb.config.util.ConfigException;
 import org.opencloudb.interceptor.SQLInterceptor;
 import org.opencloudb.manager.ManagerConnectionFactory;
 import org.opencloudb.net.AIOAcceptor;
@@ -106,6 +107,9 @@ public class MycatServer {
 
 	public MycatServer() {
 		this.config = new MycatConfig();
+		if(config.getSystem().getServiceName()==null||"".equals(config.getSystem().getServiceName().trim())){
+			throw new ConfigException("server.xml init failed!!! Not included servername");
+		}
 		crytoCacheMap=config.getCrytoCacheMap();
 		this.timer = new Timer(NAME + "Timer", true);
 		this.sqlRecorder = new SQLRecorder(config.getSystem()

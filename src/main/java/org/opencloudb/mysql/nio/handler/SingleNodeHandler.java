@@ -359,7 +359,6 @@ public class SingleNodeHandler implements ResponseHandler, Terminatable,
 
 	@Override
 	public void rowResponse(byte[] row, BackendConnection conn) {
-
 		RowDataPacket rowDataPkg = new RowDataPacket(fieldCount);
 		rowDataPkg.read(row);
 		/*********** 解密開始 *******************/
@@ -373,25 +372,30 @@ public class SingleNodeHandler implements ResponseHandler, Terminatable,
 			String[] filedAndTableName = fieldNameAndTableNameArr[i]
 					.split("\\|");
 			if (filedAndTableName.length > 0) {
-
-				try {
-					CrytoAlgorithm crytoAlgorithm = MycatServer
-							.getInstance()
-							.getCrytoCacheMap()
-							.get(((RouteResultsetNode) conn.getAttachment())
-									.getSchema()
-									+ "|"
-									+ filedAndTableName[1]
-									+ "|" + filedAndTableName[0]);
-					if (crytoAlgorithm != null) {
-						byte[] decryptByte = crytoAlgorithm.decrypt(DecryptUtil
-								.base642byte(new String(fieldValues.get(i),
-										"UTF-8")));
+                String key=((RouteResultsetNode) conn.getAttachment())
+						.getSchema()
+						+ "|"
+						+ filedAndTableName[1]
+						+ "|"
+						+ filedAndTableName[0];
+				CrytoAlgorithm crytoAlgorithm = MycatServer
+						.getInstance()
+						.getCrytoCacheMap()
+						.get(key);
+				if (crytoAlgorithm != null) {
+					byte[] decryptByte;
+					try {
+						decryptByte = crytoAlgorithm.decrypt(DecryptUtil
+								.base642byte(new String(fieldValues
+										.get(i), "UTF-8")),key);
 						fieldValues.set(i, decryptByte);
+					} catch (UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
 					}
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
+					
 				}
+
 			}
 
 		}

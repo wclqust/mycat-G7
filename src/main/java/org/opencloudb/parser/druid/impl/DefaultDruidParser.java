@@ -78,7 +78,7 @@ public class DefaultDruidParser implements DruidParser {
 			MycatSchemaStatVisitor schemaStatVisitor)
 			throws SQLNonTransientException {
 		ctx = new DruidShardingParseInfo();
-		System.out.println(stmt.toString());
+		//System.out.println(stmt.toString());
 		// 设置为原始sql，如果有需要改写sql的，可以通过修改SQLStatement中的属性，然后调用SQLStatement.toString()得到改写的sql
 		ctx.setSql(originSql);
 		// 通过visitor解析
@@ -240,7 +240,7 @@ public class DefaultDruidParser implements DruidParser {
 		if (crytoAlgorithm != null) {// 符合条件
 			oldvalue = oldvalue.substring(1, oldvalue.length() - 1);
 
-			byte[] enbytes = crytoAlgorithm.encrypt(oldvalue);
+			byte[] enbytes = crytoAlgorithm.encrypt(oldvalue,key);
 
 			return new SQLCharExpr(DecryptUtil.byte2base64(enbytes));
 		}

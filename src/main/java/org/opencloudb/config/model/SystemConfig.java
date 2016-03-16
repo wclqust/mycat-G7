@@ -30,7 +30,7 @@ import org.opencloudb.config.Isolations;
 
 /**
  * 系统基础配置项
- *
+ * 
  * @author mycat
  */
 public final class SystemConfig {
@@ -100,7 +100,8 @@ public final class SystemConfig {
 	private int sequnceHandlerType = SEQUENCEHANDLER_LOCALFILE;
 	private String sqlInterceptor = "org.opencloudb.interceptor.impl.DefaultSqlInterceptor";
 	private String sqlInterceptorType = "select";
-	private String sqlInterceptorFile = System.getProperty("user.dir")+"/logs/sql.txt";
+	private String sqlInterceptorFile = System.getProperty("user.dir")
+			+ "/logs/sql.txt";
 	public static final int MUTINODELIMIT_SMALL_DATA = 0;
 	public static final int MUTINODELIMIT_LAR_DATA = 1;
 	private int mutiNodeLimitType = MUTINODELIMIT_SMALL_DATA;
@@ -112,9 +113,10 @@ public final class SystemConfig {
 	private int usingAIO = 0;
 	private int packetHeaderSize = 4;
 	private int maxPacketSize = 16 * 1024 * 1024;
-	private int mycatNodeId=1;
-	private int useCompression =0;
-
+	private int mycatNodeId = 1;
+	private int useCompression = 0;
+	private String serviceName=null;// wcl服务名称
+	private String crytoPart1VN="1";//密钥服务一的版本,默认是1
 	public String getDefaultSqlParser() {
 		return defaultSqlParser;
 	}
@@ -225,16 +227,18 @@ public final class SystemConfig {
 		}
 
 		// MYCAT_HOME为空，默认尝试设置为当前目录或上级目录。BEN
-		if(home == null) {
+		if (home == null) {
 			try {
-				String path = new File("..").getCanonicalPath().replaceAll("\\\\", "/");
-				File conf = new File(path+"/conf");
-				if(conf.exists() && conf.isDirectory()) {
+				String path = new File("..").getCanonicalPath().replaceAll(
+						"\\\\", "/");
+				File conf = new File(path + "/conf");
+				if (conf.exists() && conf.isDirectory()) {
 					home = path;
 				} else {
-					path = new File(".").getCanonicalPath().replaceAll("\\\\", "/");
-					conf = new File(path+"/conf");
-					if(conf.exists() && conf.isDirectory()) {
+					path = new File(".").getCanonicalPath().replaceAll("\\\\",
+							"/");
+					conf = new File(path + "/conf");
+					if (conf.exists() && conf.isDirectory()) {
 						home = path;
 					}
 				}
@@ -250,13 +254,11 @@ public final class SystemConfig {
 		return home;
 	}
 
-	public int getUseCompression()
-	{
+	public int getUseCompression() {
 		return useCompression;
 	}
 
-	public void setUseCompression(int useCompression)
-	{
+	public void setUseCompression(int useCompression) {
 		this.useCompression = useCompression;
 	}
 
@@ -564,6 +566,22 @@ public final class SystemConfig {
 		this.mycatNodeId = mycatNodeId;
 	}
 
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	public String getCrytoPart1VN() {
+		return crytoPart1VN;
+	}
+
+	public void setCrytoPart1VN(String crytoPart1VN) {
+		this.crytoPart1VN = crytoPart1VN;
+	}
+
 	@Override
 	public String toString() {
 		return "SystemConfig [processorBufferLocalPercent="
@@ -600,15 +618,12 @@ public final class SystemConfig {
 				+ ", sqlInterceptor=" + sqlInterceptor
 				+ ", sqlInterceptorType=" + sqlInterceptorType
 				+ ", sqlInterceptorFile=" + sqlInterceptorFile
-				+ ", mutiNodeLimitType=" + mutiNodeLimitType 
-				+ ", mutiNodePatchSize=" + mutiNodePatchSize 
-				+ ", defaultSqlParser=" + defaultSqlParser
-				+ ", usingAIO=" + usingAIO 
-				+ ", packetHeaderSize=" + packetHeaderSize 
-				+ ", maxPacketSize=" + maxPacketSize
-				+ ", mycatNodeId=" + mycatNodeId + "]";
+				+ ", mutiNodeLimitType=" + mutiNodeLimitType
+				+ ", mutiNodePatchSize=" + mutiNodePatchSize
+				+ ", defaultSqlParser=" + defaultSqlParser + ", usingAIO="
+				+ usingAIO + ", packetHeaderSize=" + packetHeaderSize
+				+ ", maxPacketSize=" + maxPacketSize + ", mycatNodeId="
+				+ mycatNodeId + ", serviceName=" + serviceName+ ", crytoPart1VN=" + crytoPart1VN + "]";
 	}
-
-
 
 }

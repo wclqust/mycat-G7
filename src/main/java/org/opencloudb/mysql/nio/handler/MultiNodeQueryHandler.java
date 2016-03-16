@@ -526,17 +526,18 @@ public class MultiNodeQueryHandler extends MultiNodeHandler implements
 					String[] filedAndTableName = fieldNameAndTableNameArr[i]
 							.split("\\|");
 					if (filedAndTableName.length > 0) {
+						String key=rNode.getSchema() + "|"
+								+ filedAndTableName[1] + "|"
+								+ filedAndTableName[0];
 						CrytoAlgorithm crytoAlgorithm = MycatServer
 								.getInstance()
 								.getCrytoCacheMap()
-								.get(rNode.getSchema() + "|"
-										+ filedAndTableName[1] + "|"
-										+ filedAndTableName[0]);
+								.get(key);
 						if (crytoAlgorithm != null) {
 							byte[] decryptByte = crytoAlgorithm
 									.decrypt(DecryptUtil
 											.base642byte(new String(fieldValues
-													.get(i), "UTF-8")));
+													.get(i), "UTF-8")),key);
 							fieldValues.set(i, decryptByte);
 						}
 

@@ -42,15 +42,17 @@ public interface CrytoAlgorithm {
 	 * 
 	 * @param base642byte
 	 *            加密后的字节数组
+	 * @param key 
 	 * @return 解密后的字节数组
 	 */
-	byte[] decrypt(byte[] base642byte);
+	byte[] decrypt(byte[] base642byte, String key);
 
 	/**
 	 * 
+	 * @param key 
 	 * @param oldvalue需要加密的字符串
 	 * @return 加密后的字节数组
 	 */
 
-	byte[] encrypt(String oldvalue);
+	byte[] encrypt(String oldvalue, String key);
 }

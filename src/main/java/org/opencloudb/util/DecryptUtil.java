@@ -43,6 +43,7 @@ import java.security.spec.X509EncodedKeySpec;
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 
 import org.opencloudb.config.util.ConfigException;
 
@@ -111,10 +112,10 @@ public class DecryptUtil {
 		// String password = args[0];
 		// System.out.println(encrypt(password));
 		// public static void main(String[] args) {
-		byte[] ss = intToByteArray(1000003333);
-		System.out.println(byteArrayToInt(ss));
+		//byte[] ss = intToByteArray(1000003333);
+		//System.out.println(byteArrayToInt(ss));
 		System.out.println(new String(decryptByKey(
-				encryptByKey("小明", 128, "AES"), 128, "AES")));
+				encryptByKey("123456781234囙为国宽", 128, "AES"), 128, "AES")));
 		// }
 
 	}
@@ -527,12 +528,15 @@ public class DecryptUtil {
 		return key;
 
 	}
-
+	static byte[] getIV() {
+		String iv = "1234567812345678"; // IV length: must be 16 bytes long
+		return iv.getBytes();
+	}
 	// 1.加密
 	public static byte[] encryptByKey(String source, int size, String type) {
 		try {
-			Cipher cipher = Cipher.getInstance(type);
-			cipher.init(Cipher.ENCRYPT_MODE, genKey(type, size));
+			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			cipher.init(Cipher.ENCRYPT_MODE, genKey(type, size),new IvParameterSpec(getIV()));
 			byte[] bytes = cipher.doFinal(source.getBytes());
 			// 再加上加密数据的坐标
 			byte[] keypart1 = intToByteArray(1);
@@ -549,8 +553,8 @@ public class DecryptUtil {
 	// 2.解密
 	public static byte[] decryptByKey(byte[] source, int size, String type) {
 		try {
-			Cipher cipher = Cipher.getInstance(type);
-			cipher.init(Cipher.DECRYPT_MODE, genKey(type, size));
+			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			cipher.init(Cipher.DECRYPT_MODE, genKey(type, size),new IvParameterSpec(getIV()));
 			System.out.println(byteArrayToInt(subByte(source,0,4)));
 			System.out.println(byteArrayToInt(subByte(source,4,8)));
 			byte[] bytes = cipher.doFinal(subByte(source,8,source.length));
